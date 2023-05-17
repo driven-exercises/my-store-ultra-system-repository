@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: ./.hub/Dockerfile
+    volumes:
+      - ..:/usr/src/app
+      - ../node_modules:/usr/src/app/node_modules/
+      - /usr/src/app/tests
+    command: npm run test
+    networks:
+      - hub-network
+    depends_on:
+      - postgres
+  mongo:
+    build:
+      context: ../
+      dockerfile: ./.hub/postgres.dockerfile
+    networks:
+      - hub-network
+    container_name: postgres
+
+networks:
+  hub-network:
+    driver: bridge
